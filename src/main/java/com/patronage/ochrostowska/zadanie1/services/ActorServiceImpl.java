@@ -32,20 +32,28 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor save(Actor a) {
-        actors.add(new Actor(a.getName(), a.getSurname()));
+        if (a.getName() == null || a.getSurname() == null) return null;
+        if(isExist(a)!=0) return null;
+        a.setAutoId();
+        actors.add(a);
         return a;
     }
 
     @Override
     public Set<Actor> saveMany(Set<Actor> list) {
+        Set<Actor> added = new HashSet<>();
         for (Actor a : list) {
-            actors.add(a);
+            if (a.getName() != null && a.getSurname() != null) {
+                added.add(a);
+                actors.add(a);
+            }
         }
-        return list;
+        return added;
     }
 
     @Override
     public Actor update(int id, Actor a) {
+        if(a.getName()==null || a.getSurname()==null) return null;
         for (Actor actor : actors)
             if (actor.getId() == id) {
                 a.setId(actor.getId());
@@ -58,16 +66,17 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int deleteById(int id) {
-        for (Actor a : actors) if (a.getId() == id) {
-            actors.remove(a);
-            return id;
-        }
+        for (Actor a : actors)
+            if (a.getId() == id) {
+                actors.remove(a);
+                return id;
+            }
         return 0;
     }
 
     @Override
     public void deleteAll() {
-        for (Actor a : actors) actors.remove(a);
+        actors.clear();
     }
 
     @Override

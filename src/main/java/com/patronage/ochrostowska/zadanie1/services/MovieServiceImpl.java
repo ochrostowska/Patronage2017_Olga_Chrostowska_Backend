@@ -39,20 +39,23 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Actor addActor(Movie m, Actor a) {
-        for (Actor actor : m.getActors()) if(actor.getName() == a.getName() && actor.getSurname() == a.getSurname()) return null;
+        for (Actor actor : m.getActors())
+            if (actor.getName() == a.getName() && actor.getSurname() == a.getSurname()) return null;
         m.getActors().add(a);
         return a;
     }
 
     @Override
     public Movie save(Movie m) {
-        if(isExist(m)) return null;
-        movies.add(new Movie(m.getTitle(), m.getYear(), m.getGenre(), m.getActors()));
+        if (m.getTitle() == null || m.getYear() == null || m.getDirector() == null || m.getGenre() == null) return null;
+        if (isExist(m)) return null;
+        movies.add(m);
         return m;
     }
 
     @Override
     public Movie update(int id, Movie m) {
+        if (m.getTitle() == null || m.getYear() == null || m.getDirector() == null || m.getGenre() == null) return null;
         for (Movie a : movies)
             if (a.getId() == id) {
                 m.setId(a.getId());
@@ -75,13 +78,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteAll() {
-        for (Movie a : movies) movies.remove(a);
+        movies.clear();
     }
 
     @Override
     public boolean isExist(Movie r) {
         for (Movie m : movies)
-            if (m.getTitle() == r.getTitle() && m.getYear() == r.getYear()) return true;
+            if (m.getTitle() == r.getTitle() && m.getYear() == r.getYear() && m.getDirector() == r.getDirector())
+                return true;
         return false;
     }
 }
