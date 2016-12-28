@@ -33,14 +33,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findByName(String name) {
-        for (Movie m : movies) if (m.getTitle() == name) return m;
+        for (Movie m : movies) if (m.getTitle().equals(name)) return m;
         return null;
     }
 
     @Override
     public Actor addActor(Movie m, Actor a) {
         for (Actor actor : m.getActors())
-            if (actor.getName() == a.getName() && actor.getSurname() == a.getSurname()) return null;
+            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) return null;
         m.getActors().add(a);
         return a;
     }
@@ -84,7 +84,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public boolean isExist(Movie r) {
         for (Movie m : movies)
-            if (m.getTitle() == r.getTitle() && m.getYear() == r.getYear() && m.getDirector() == r.getDirector())
+            if (m.getTitle().equals(r.getTitle()) && m.getYear().equals(r.getYear()) && m.getDirector().equals(r.getDirector()))
                 return true;
         return false;
     }

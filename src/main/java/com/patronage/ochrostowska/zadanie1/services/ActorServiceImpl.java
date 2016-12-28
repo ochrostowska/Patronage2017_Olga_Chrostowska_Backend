@@ -82,7 +82,7 @@ public class ActorServiceImpl implements ActorService {
     @Override
     public int isExist(Actor a) {
         for (Actor actor : actors)
-            if (actor.getName() == a.getName() && actor.getSurname() == a.getSurname()) return actor.getId();
+            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) return actor.getId();
         return 0;
     }
 
