@@ -33,7 +33,7 @@ public class MovieRestController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     ResponseEntity addOne(@RequestBody Movie movie) {
-        if(movie.getTitle()==null || movie.getGenre()==null || movie.getYear()==null || movie.getDirector()==null)
+        if(movie.getTitle().trim().isEmpty() || movie.getGenre().trim().isEmpty() || movie.getYear().trim().isEmpty() || movie.getDirector().trim().isEmpty())
             return new ResponseEntity<>("There are some empty fields, movie wasn't added", HttpStatus.BAD_REQUEST);
         if(service.isExist(movie)) return new ResponseEntity("Movie already exists" , HttpStatus.CONFLICT);
         movie.setAutoId();
@@ -50,14 +50,13 @@ public class MovieRestController {
             return new ResponseEntity<>("There are some empty fields, actor wasn't added", HttpStatus.BAD_REQUEST);
         int actorId = actorService.isExist(actor);
         if (actorId != 0) {
-
             service.addActor(m, actorService.findById(actorId));
             return new ResponseEntity<>("Added actor with id " + actorId, HttpStatus.OK);
         } else {
             Actor a = actorService.save(actor);
             service.addActor(m, a);
-            return new ResponseEntity<>("Added new actor " + actor, HttpStatus.OK);
         }
+        return new ResponseEntity<>("Added new actor " + actor, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/actors", method = RequestMethod.GET)

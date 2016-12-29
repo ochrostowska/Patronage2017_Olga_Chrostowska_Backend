@@ -33,17 +33,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ActorControllerTest {
 
-    String name = "Some";
-    String surname = "Beauty";
+    private String name = "Some";
+    private String surname = "Beauty";
 
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
 
     private MockMvc mockMvc;
-    ObjectMapper mapper = new ObjectMapper();
-
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private ActorServiceImpl service;
@@ -51,17 +49,6 @@ public class ActorControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    void setConverters(HttpMessageConverter<?>[] converters) {
-
-        this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
-                .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
-                .findAny()
-                .orElse(null);
-
-        assertNotNull("the JSON message converter must not be null",
-                this.mappingJackson2HttpMessageConverter);
-    }
 
     @Before
     public void setup() throws Exception {

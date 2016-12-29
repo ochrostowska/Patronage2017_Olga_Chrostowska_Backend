@@ -10,11 +10,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Actor {
 
+    private static final AtomicInteger COUNT = new AtomicInteger(0);
+    public static final Actor GHOST = new Actor();
+
     @Id
     private int id;
     private String name;
     private String surname;
-    private static final AtomicInteger count = new AtomicInteger(0);
 
     public int getId() {
         return id;
@@ -25,7 +27,7 @@ public class Actor {
     }
 
     public void setAutoId() {
-        this.id = count.incrementAndGet();
+        this.id = COUNT.incrementAndGet();
     }
 
     public String getName() {
@@ -37,7 +39,7 @@ public class Actor {
     }
 
     public Actor(String name, String surname) {
-        this.id = count.incrementAndGet();
+        this.id = COUNT.incrementAndGet();
         this.name = name;
         this.surname = surname;
     }

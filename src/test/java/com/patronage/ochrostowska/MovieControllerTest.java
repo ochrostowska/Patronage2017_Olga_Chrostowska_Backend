@@ -43,9 +43,7 @@ public class MovieControllerTest {
             Charset.forName("utf8"));
 
     private MockMvc mockMvc;
-    ObjectMapper mapper = new ObjectMapper();
-
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private ActorServiceImpl actorService;
@@ -56,17 +54,6 @@ public class MovieControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    void setConverters(HttpMessageConverter<?>[] converters) {
-
-        this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
-                .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
-                .findAny()
-                .orElse(null);
-
-        assertNotNull("the JSON message converter must not be null",
-                this.mappingJackson2HttpMessageConverter);
-    }
 
     @Before
     public void setup() throws Exception {

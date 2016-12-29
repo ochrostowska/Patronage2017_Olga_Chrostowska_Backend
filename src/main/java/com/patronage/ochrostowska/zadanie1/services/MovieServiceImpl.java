@@ -27,35 +27,52 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findById(int id) {
-        for (Movie m : movies) if (m.getId() == id) return m;
-        return null;
+        for (Movie m : movies) {
+            if (m.getId() == id) {
+                return m;
+            }
+        }
+        return Movie.GHOST;
     }
 
     @Override
     public Movie findByName(String name) {
-        for (Movie m : movies) if (m.getTitle().equals(name)) return m;
-        return null;
+        for (Movie m : movies) {
+            if (m.getTitle().equals(name)) {
+                return m;
+            }
+        }
+        return Movie.GHOST;
     }
 
     @Override
     public Actor addActor(Movie m, Actor a) {
-        for (Actor actor : m.getActors())
-            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) return null;
+        for (Actor actor : m.getActors()) {
+            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) {
+                return Actor.GHOST;
+            }
+        }
         m.getActors().add(a);
         return a;
     }
 
     @Override
     public Movie save(Movie m) {
-        if (m.getTitle() == null || m.getYear() == null || m.getDirector() == null || m.getGenre() == null) return null;
-        if (isExist(m)) return null;
+        if (m.getTitle().trim().isEmpty() || m.getYear().trim().isEmpty() || m.getDirector().trim().isEmpty() || m.getGenre().trim().isEmpty()) {
+            return Movie.GHOST;
+        }
+        if (isExist(m)) {
+            return Movie.GHOST;
+        }
         movies.add(m);
         return m;
     }
 
     @Override
     public Movie update(int id, Movie m) {
-        if (m.getTitle() == null || m.getYear() == null || m.getDirector() == null || m.getGenre() == null) return null;
+        if (m.getTitle().trim().isEmpty() || m.getYear().trim().isEmpty() || m.getDirector().trim().isEmpty() || m.getGenre().trim().isEmpty()) {
+            return Movie.GHOST;
+        }
         for (Movie a : movies)
             if (a.getId() == id) {
                 m.setId(a.getId());
@@ -63,16 +80,17 @@ public class MovieServiceImpl implements MovieService {
                 movies.add(m);
                 return m;
             }
-        return null;
+        return Movie.GHOST;
     }
 
     @Override
     public int deleteById(int id) {
-        for (Movie a : movies)
+        for (Movie a : movies) {
             if (a.getId() == id) {
                 movies.remove(a);
                 return id;
             }
+        }
         return 0;
     }
 
@@ -83,9 +101,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public boolean isExist(Movie r) {
-        for (Movie m : movies)
-            if (m.getTitle().equals(r.getTitle()) && m.getYear().equals(r.getYear()) && m.getDirector().equals(r.getDirector()))
+        for (Movie m : movies) {
+            if (m.getTitle().equals(r.getTitle()) && m.getYear().equals(r.getYear()) && m.getDirector().equals(r.getDirector())) {
                 return true;
+            }
+        }
         return false;
     }
 }

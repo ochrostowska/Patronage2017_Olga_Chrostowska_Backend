@@ -14,7 +14,6 @@ import java.util.Set;
 public class ActorServiceImpl implements ActorService {
 
     private Set<Actor> actors;
-
     public ActorServiceImpl() {
         actors = new HashSet<>();
     }
@@ -26,14 +25,22 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor findById(int id) {
-        for (Actor a : actors) if (a.getId() == id) return a;
-        return null;
+        for (Actor a : actors) {
+            if (a.getId() == id) {
+                return a;
+            }
+        }
+        return Actor.GHOST;
     }
 
     @Override
     public Actor save(Actor a) {
-        if (a.getName() == null || a.getSurname() == null) return null;
-        if(isExist(a)!=0) return null;
+        if (a.getName().trim().isEmpty() || a.getSurname().trim().isEmpty()) {
+            return Actor.GHOST;
+        }
+        if (isExist(a) != 0) {
+            return Actor.GHOST;
+        }
         a.setAutoId();
         actors.add(a);
         return a;
@@ -43,7 +50,7 @@ public class ActorServiceImpl implements ActorService {
     public Set<Actor> saveMany(Set<Actor> list) {
         Set<Actor> added = new HashSet<>();
         for (Actor a : list) {
-            if (a.getName() != null && a.getSurname() != null) {
+            if (!a.getName().trim().isEmpty() && !a.getSurname().trim().isEmpty()) {
                 added.add(a);
                 actors.add(a);
             }
@@ -53,24 +60,28 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Actor update(int id, Actor a) {
-        if(a.getName()==null || a.getSurname()==null) return null;
-        for (Actor actor : actors)
+        if (a.getName().trim().isEmpty() || a.getSurname().trim().isEmpty()) {
+            return Actor.GHOST;
+        }
+        for (Actor actor : actors) {
             if (actor.getId() == id) {
                 a.setId(actor.getId());
                 actors.remove(actor);
                 actors.add(a);
                 return a;
             }
-        return null;
+        }
+        return Actor.GHOST;
     }
 
     @Override
     public int deleteById(int id) {
-        for (Actor a : actors)
+        for (Actor a : actors) {
             if (a.getId() == id) {
                 actors.remove(a);
                 return id;
             }
+        }
         return 0;
     }
 
@@ -81,10 +92,13 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public int isExist(Actor a) {
-        for (Actor actor : actors)
-            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) return actor.getId();
+        for (Actor actor : actors) {
+            if (actor.getName().equals(a.getName()) && actor.getSurname().equals(a.getSurname())) {
+                return actor.getId();
+            }
+        }
         return 0;
     }
 
-
 }
+

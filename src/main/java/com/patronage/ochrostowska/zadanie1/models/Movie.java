@@ -13,6 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Movie {
 
+    private static final AtomicInteger COUNT = new AtomicInteger(0);
+    public static final Movie GHOST = new Movie();
+
     @Id
     private int id;
     private String title;
@@ -20,8 +23,6 @@ public class Movie {
     private String year;
     private String director;
     private HashSet<Actor> actors = new HashSet<>();
-
-    private static final AtomicInteger count = new AtomicInteger(0);
 
     public HashSet<Actor> getActors() {
         return actors;
@@ -31,7 +32,7 @@ public class Movie {
         this.id = id;
     }
 
-    public void setAutoId() { this.id = count.incrementAndGet();}
+    public void setAutoId() { this.id = COUNT.incrementAndGet();}
     public int getId() {
         return id;
     }
@@ -69,7 +70,7 @@ public class Movie {
     }
 
     public Movie(String title, String year, String genre, String director) {
-        this.id = count.incrementAndGet();
+        this.id = COUNT.incrementAndGet();
         this.title = title;
         this.genre = genre;
         this.year = year;
@@ -77,7 +78,7 @@ public class Movie {
     }
 
     public Movie(String title, String year, String genre, String director, HashSet<Actor> actors) {
-        this.id = count.incrementAndGet();
+        this.id = COUNT.incrementAndGet();
         this.title = title;
         this.genre = genre;
         this.year = year;

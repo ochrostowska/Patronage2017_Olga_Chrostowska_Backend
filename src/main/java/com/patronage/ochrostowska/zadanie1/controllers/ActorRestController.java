@@ -28,13 +28,13 @@ public class ActorRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     ResponseEntity getById(@PathVariable int id) {
-        if(service.findById(id)==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(service.findById(id)==Actor.GHOST) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     ResponseEntity addOne(@RequestBody Actor actor) {
-        if(actor.getName()==null || actor.getSurname()==null)
+        if(actor.getName().trim().isEmpty() || actor.getSurname().trim().isEmpty())
             return new ResponseEntity<>("There are some empty fields, actor wasn't added", HttpStatus.BAD_REQUEST);
         if(service.isExist(actor)!=0) return new ResponseEntity("Actor already exists" , HttpStatus.CONFLICT);
         service.save(actor);
@@ -52,7 +52,7 @@ public class ActorRestController {
         Actor a = service.findById(id);
         HashSet<Actor> cast;
         Actor toDelete = null;
-        if (a == null) return new ResponseEntity<>("No actor found for ID " + id, HttpStatus.NOT_FOUND);
+        if (a == Actor.GHOST) return new ResponseEntity<>("No actor found for ID " + id, HttpStatus.NOT_FOUND);
         for (Movie m : movieService.findAll()) {
             cast = m.getActors();
             for (Actor actor : cast) {
@@ -71,8 +71,13 @@ public class ActorRestController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json")
     ResponseEntity updateOne(@PathVariable int id, @RequestBody Actor actor) {
+        if(actor.getName().trim().isEmpty() || actor.getName().trim().isEmpty()) {
+            return new ResponseEntity<>("Couldn't update actor with null values " + id, HttpStatus.BAD_REQUEST);
+        }
         actor = service.update(id, actor);
-        if(actor==null) return new ResponseEntity<>("No actor found for ID " + id, HttpStatus.NOT_FOUND);
+        if(actor==Actor.GHOST) {
+            return new ResponseEntity<>("No actor found for ID " + id, HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }
